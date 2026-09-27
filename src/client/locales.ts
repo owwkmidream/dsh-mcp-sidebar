@@ -4,7 +4,7 @@
  * locale service by the client plugin body and consumed through the
  * framework-injected `t` seat on the panel props.
  *
- * @module @owwkmidream/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-mcp-sidebar
  */
 
 /** Simplified Chinese dictionary (the key-set source of truth). */

@@ -8,7 +8,7 @@
  * Styling uses the DSH design tokens (`--dsw-alias-*`); the stylesheet is
  * injected once by the client plugin body.
  *
- * @module @owwkmidream/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-mcp-sidebar
  */
 
 import { Modal } from "@deepseek-ai/dsh-client-ui-primitives";

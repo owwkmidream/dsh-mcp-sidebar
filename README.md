@@ -1,4 +1,4 @@
-# @owwkmidream/dsh-plugin-setting-mcp
+# @owwkmidream/dsh-mcp-sidebar
 
 English | [中文](README.zh.md)
 
@@ -41,21 +41,25 @@ every argument and result on both sides.
 
 ## Install
 
-From a local checkout (the path must be absolute):
-
-```sh
-dsh plugin --profile desktop add D:\path\to\dsh-plugin-setting-mcp
-```
-
-Or straight from git:
+Straight from git:
 
 ```sh
 dsh plugin --profile desktop add github:owwkmidream/dsh-mcp-sidebar
 ```
 
+Or from a local checkout (the path must be absolute):
+
+```sh
+dsh plugin --profile desktop add D:\path\to\dsh-mcp-sidebar
+```
+
 Both forms validate that the package declares `dsh.bundle`, install it with pnpm,
 and select the bundle in the profile's `dsh.profile.bundles`, so no manual
 dependency editing is needed.
+
+`lib/` is committed on purpose: pnpm runs no build step for a git dependency, so
+a repository without the compiled output installs a package whose `main` points
+at a missing file. Run `pnpm build` and commit the result before pushing.
 
 ## How it maps to `cordis.patch.yml`
 

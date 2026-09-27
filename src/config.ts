@@ -3,7 +3,7 @@
  * loader config accepted by `@deepseek-ai/dsh-mcp-client`. Pure and
  * dependency-free so it is unit-testable.
  *
- * @module @owwkmidream/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-mcp-sidebar
  */
 
 import type { EntryOptions } from "@deepseek-ai/cordis-plugin-loader";

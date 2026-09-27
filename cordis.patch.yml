@@ -1,4 +1,4 @@
-# The @owwkmidream/dsh-plugin-setting-mcp bundle patch: mounts the plugin's server
+# The @owwkmidream/dsh-mcp-sidebar bundle patch: mounts the plugin's server
 # half as one Cordis loader row. The same entry is also the browser roster row
 # (the plugin declares `dsh.client`), so the client half is discovered from it
 # by the client-modules node half. Apply this bundle after `dsh-base` +
@@ -6,5 +6,5 @@
 # plugin's own `inject` resolves against those.
 
 - insert:
-    - id: setting-mcp
-      name: '@owwkmidream/dsh-plugin-setting-mcp'
+    - id: mcp-sidebar
+      name: '@owwkmidream/dsh-mcp-sidebar'

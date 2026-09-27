@@ -9,19 +9,15 @@
  *
  * @module @owwkmidream/dsh-mcp-sidebar
  */
-
 import type { EntryOptions } from "@deepseek-ai/cordis-plugin-loader";
-import { MCP_CLIENT_MODULE } from "./schemas.js";
-
 /** One parsed entry of a loader patch list (`cordis.patch.yml` top-level item). */
 export interface PatchEntry {
-	/** Target row id for an override patch, or the group id for a group insert. */
-	id?: string;
-	/** Rows to insert; the only shape this plugin owns and mutates. */
-	insert?: EntryOptions[];
-	[key: string]: unknown;
+    /** Target row id for an override patch, or the group id for a group insert. */
+    id?: string;
+    /** Rows to insert; the only shape this plugin owns and mutates. */
+    insert?: EntryOptions[];
+    [key: string]: unknown;
 }
-
 /**
  * Reconcile a patch list so its `insert` blocks hold exactly `rows` MCP rows.
  *
@@ -35,24 +31,7 @@ export interface PatchEntry {
  * @param rows - the desired MCP loader rows, in order.
  * @returns a new patch list (the input is never mutated).
  */
-export function syncMcpPatchEntries(entries: PatchEntry[], rows: EntryOptions[]): PatchEntry[] {
-	const kept: PatchEntry[] = [];
-	for (const patch of entries) {
-		if (Array.isArray(patch.insert)) {
-			const rest = patch.insert.filter((row) => row.name !== MCP_CLIENT_MODULE);
-			if (rest.length > 0) {
-				kept.push({ ...patch, insert: rest });
-			}
-			// An anonymous insert that is now empty, or a group insert whose only
-			// rows were MCP rows, is dropped entirely.
-			continue;
-		}
-		kept.push(patch);
-	}
-	if (rows.length > 0) kept.push({ insert: rows });
-	return kept;
-}
-
+export declare function syncMcpPatchEntries(entries: PatchEntry[], rows: EntryOptions[]): PatchEntry[];
 /**
  * A stable, collision-free loader entry id for a new server: `mcp-<serverName>`
  * (the same convention the profile's hand-written rows use), suffixed when the
@@ -61,10 +40,4 @@ export function syncMcpPatchEntries(entries: PatchEntry[], rows: EntryOptions[])
  * @param serverName - the server's validated `serverName`.
  * @param taken - ids that must not be reused (existing entries plus already-assigned new ids).
  */
-export function stableServerId(serverName: string, taken: ReadonlySet<string>): string {
-	const base = `mcp-${serverName}`;
-	let id = base;
-	let index = 2;
-	while (taken.has(id)) id = `${base}-${index++}`;
-	return id;
-}
+export declare function stableServerId(serverName: string, taken: ReadonlySet<string>): string;

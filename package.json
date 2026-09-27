@@ -1,5 +1,5 @@
 {
-  "name": "@owwkmidream/dsh-plugin-setting-mcp",
+  "name": "@owwkmidream/dsh-mcp-sidebar",
   "version": "0.1.2",
   "description": "DSH web plugin: manage MCP servers from a sidebar panel (view, edit, remove, enable/disable) with hot reload on save",
   "type": "module",

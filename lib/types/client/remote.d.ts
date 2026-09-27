@@ -5,14 +5,20 @@
  *
  * @module @owwkmidream/dsh-mcp-sidebar
  */
-
 import type { McpServerView, SaveInput } from "../schemas.js";
-
 /** One settled wire result. */
-export type RpcResult<T> = { ok: true; value: T } | { ok: false; error: { code: string; message: string } };
-
+export type RpcResult<T> = {
+    ok: true;
+    value: T;
+} | {
+    ok: false;
+    error: {
+        code: string;
+        message: string;
+    };
+};
 /** Typed projection of the installed `remote.mcp` namespace. */
 export interface McpRemote {
-	list(): Promise<RpcResult<McpServerView[]>>;
-	save(input: SaveInput): Promise<RpcResult<McpServerView[]>>;
+    list(): Promise<RpcResult<McpServerView[]>>;
+    save(input: SaveInput): Promise<RpcResult<McpServerView[]>>;
 }

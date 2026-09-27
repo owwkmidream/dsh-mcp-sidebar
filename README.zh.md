@@ -1,4 +1,4 @@
-# @owwkmidream/dsh-plugin-setting-mcp
+# @owwkmidream/dsh-mcp-sidebar
 
 [English](README.md) | 中文
 
@@ -36,20 +36,23 @@ DSH Web 插件：**在侧栏面板中管理 MCP 服务**。可以查看、修改
 
 ## 安装
 
-从本地目录安装（路径必须是绝对路径）：
-
-```sh
-dsh plugin --profile desktop add D:\path\to\dsh-plugin-setting-mcp
-```
-
-或直接从 git 安装：
+直接从 git 安装：
 
 ```sh
 dsh plugin --profile desktop add github:owwkmidream/dsh-mcp-sidebar
 ```
 
+或从本地目录安装（路径必须是绝对路径）：
+
+```sh
+dsh plugin --profile desktop add D:\path\to\dsh-mcp-sidebar
+```
+
 两种方式都会校验包声明了 `dsh.bundle`、用 pnpm 安装、并把该 bundle 选入 profile 的
 `dsh.profile.bundles`，无需手工改依赖。
+
+`lib/` 是刻意提交进仓库的：pnpm 对 git 依赖不会执行构建，仓库里缺少编译产物就会装到
+一个 `main` 指向不存在文件的包。推送前请先 `pnpm build` 并提交产物。
 
 ## 与 `cordis.patch.yml` 的对应关系
 

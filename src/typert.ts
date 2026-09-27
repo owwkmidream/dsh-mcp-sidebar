@@ -6,13 +6,13 @@
  * Hand-written in the same shape the `@deepseek-ai/dsh-typert-generator`
  * emits (see `@deepseek-ai/dsh-commands`' generated `typert.host.js`).
  *
- * @module @owwkmidream/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-mcp-sidebar
  */
 
 import { z } from "zod";
 import { mcpServerViewSchema, saveInputSchema } from "./schemas.js";
 
-const PKG = "@owwkmidream/dsh-plugin-setting-mcp";
+const PKG = "@owwkmidream/dsh-mcp-sidebar";
 
 const direct: { kind: "direct" } = { kind: "direct" };
 

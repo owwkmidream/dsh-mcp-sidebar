@@ -1,5 +1,9 @@
+# `lib/` is intentionally NOT ignored: this plugin is installed straight from
+# GitHub (`dsh plugin --profile desktop add github:owwkmidream/dsh-mcp-sidebar`),
+# and pnpm performs no build step for a git dependency. The compiled artifacts
+# must therefore be committed, the way the other git-installed DSH plugins do.
+# Run `pnpm build` and commit the result before pushing.
 node_modules/
-lib/
 dist/
 coverage/
 *.tsbuildinfo
