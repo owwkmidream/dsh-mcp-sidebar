@@ -44,10 +44,9 @@ export const C = {
 	checkbox: "dshmcp-checkbox",
 	error: "dshmcp-error",
 	empty: "dshmcp-empty",
-	editor: "dshmcp-editor",
-	editorHeader: "dshmcp-editor-header",
+	editorDialog: "dshmcp-editor-dialog",
+	editorDialogContent: "dshmcp-editor-dialog-content",
 	editorBody: "dshmcp-editor-body",
-	editorFooter: "dshmcp-editor-footer",
 	footer: "dshmcp-footer",
 	notice: "dshmcp-notice",
 } as const;
@@ -96,10 +95,13 @@ const css = `
 .dshmcp-error{box-sizing:border-box;padding:8px 12px;border-radius:var(--dsw-radius-md);background:var(--dsw-alias-interactive-bg-hover-danger);color:var(--dsw-alias-state-error-primary);font-size:13px;line-height:20px}
 .dshmcp-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 16px;color:var(--dsw-alias-label-tertiary);font-size:13px;line-height:20px;text-align:center}
 
-.dshmcp-editor{display:flex;flex-direction:column;box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-bg-base);overflow:hidden}
-.dshmcp-editor-header{padding:12px 16px;border-bottom:1px solid var(--dsw-alias-border-l2);font-size:14px;font-weight:500;line-height:20px;color:var(--dsw-alias-label-primary)}
-.dshmcp-editor-body{display:flex;flex-direction:column;gap:14px;padding:16px}
-.dshmcp-editor-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid var(--dsw-alias-border-l1)}
+/* The editor dialog. The shipped Modal caps itself at min(380px, 100%), which
+   is too narrow for a server form, and its card does not scroll. Widen it and
+   make the content region the scroller (through Modal's own contentClassName
+   seat), so a long form never pushes its save button off-screen. */
+.dshmcp-editor-dialog{width:min(560px,100%);max-height:calc(100vh - 96px)}
+.dshmcp-editor-dialog-content{flex:1;min-height:0;overflow:auto}
+.dshmcp-editor-body{display:flex;flex-direction:column;gap:14px}
 
 .dshmcp-footer{display:flex;align-items:center;gap:12px}
 .dshmcp-notice{flex:1;font-size:13px;line-height:20px;color:var(--dsw-alias-state-success-primary)}

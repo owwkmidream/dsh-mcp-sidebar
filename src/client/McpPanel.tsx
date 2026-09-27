@@ -11,6 +11,7 @@
  * @module @opendsh/dsh-plugin-setting-mcp
  */
 
+import { Modal } from "@deepseek-ai/dsh-client-ui-primitives";
 import type { TranslateNS } from "@deepseek-ai/dsh-client-ui-slots";
 import { useCallback, useEffect, useState } from "react";
 import { type McpServerInput, type McpServerView, SERVER_NAME_PATTERN } from "../schemas.js";
@@ -233,9 +234,120 @@ interface EditorProps {
 	t: PanelTranslate;
 }
 
-function ServerEditor({ draft, onDraft, onCancel, onCommit, t }: EditorProps) {
-	const [error, setError] = useState<string | undefined>();
+/**
+ * The editor's fields. Rendered inside the {@link Modal} shell, so it owns no
+ * dialog chrome: the modal supplies the title, close button, and footer.
+ */
+function ServerEditorFields({ draft, onDraft, t }: Omit<EditorProps, "onCancel" | "onCommit">) {
 	const set = (patch: Partial<EditorDraft>) => onDraft({ ...draft, ...patch });
+
+	return (
+		<>
+			<div className={C.field}>
+				<div className={C.label}>{t("form.serverName")}</div>
+				<input
+					className={C.input}
+					value={draft.serverName}
+					onChange={(event) => set({ serverName: event.target.value })}
+					placeholder="github"
+				/>
+				<span className={C.hint}>{t("form.serverNameHint")}</span>
+			</div>
+			<div className={C.field}>
+				<div className={C.label}>{t("form.transport")}</div>
+				<select
+					className={C.select}
+					value={draft.transport}
+					onChange={(event) => set({ transport: event.target.value as EditorDraft["transport"] })}
+				>
+					<option value="stdio">{t("form.transport.stdio")}</option>
+					<option value="streamable-http">{t("form.transport.http")}</option>
+				</select>
+			</div>
+			{draft.transport === "stdio" ? (
+				<>
+					<div className={C.field}>
+						<div className={C.label}>{t("form.command")}</div>
+						<input
+							className={C.input}
+							value={draft.command}
+							onChange={(event) => set({ command: event.target.value })}
+							placeholder="npx -y @modelcontextprotocol/server-github"
+						/>
+						<span className={C.hint}>{t("form.commandHint")}</span>
+					</div>
+					<div className={C.field}>
+						<div className={C.label}>{t("form.args")}</div>
+						<textarea
+							className={C.textarea}
+							value={draft.argsText}
+							onChange={(event) => set({ argsText: event.target.value })}
+						/>
+					</div>
+					<div className={C.field}>
+						<div className={C.label}>{t("form.cwd")}</div>
+						<input className={C.input} value={draft.cwd} onChange={(event) => set({ cwd: event.target.value })} />
+					</div>
+					<div className={C.field}>
+						<div className={C.label}>{t("form.env")}</div>
+						<textarea
+							className={C.textarea}
+							value={draft.envText}
+							onChange={(event) => set({ envText: event.target.value })}
+							placeholder="GITHUB_TOKEN=xxx"
+						/>
+					</div>
+				</>
+			) : (
+				<>
+					<div className={C.field}>
+						<div className={C.label}>{t("form.url")}</div>
+						<input
+							className={C.input}
+							value={draft.url}
+							onChange={(event) => set({ url: event.target.value })}
+							placeholder="http://localhost:3000/mcp"
+						/>
+					</div>
+					<div className={C.field}>
+						<div className={C.label}>{t("form.headers")}</div>
+						<textarea
+							className={C.textarea}
+							value={draft.headersText}
+							onChange={(event) => set({ headersText: event.target.value })}
+							placeholder="Authorization=Bearer xxx"
+						/>
+					</div>
+				</>
+			)}
+			<div className={C.field}>
+				<div className={C.label}>{t("form.timeout")}</div>
+				<input
+					className={C.input}
+					value={draft.timeoutText}
+					onChange={(event) => set({ timeoutText: event.target.value })}
+					placeholder="60000"
+				/>
+			</div>
+			<label className={C.checkbox}>
+				<input
+					type="checkbox"
+					checked={draft.failOnStartup}
+					onChange={(event) => set({ failOnStartup: event.target.checked })}
+				/>
+				{t("form.failOnStartup")}
+			</label>
+		</>
+	);
+}
+
+/**
+ * The edit/add dialog. Wraps {@link ServerEditorFields} in the shipped `Modal`
+ * so a long form is centred over the page instead of being appended below the
+ * list, where it could be scrolled out of view.
+ */
+function ServerEditorDialog({ draft, onDraft, onCancel, onCommit, t }: EditorProps) {
+	const [error, setError] = useState<string | undefined>();
 
 	const commit = () => {
 		const validation = validateEditor(t, draft);
@@ -247,116 +359,34 @@ function ServerEditor({ draft, onDraft, onCancel, onCommit, t }: EditorProps) {
 	};
 
 	return (
-		<div className={C.editor}>
-			<div className={C.editorHeader}>
-				{draft.id === "" ? t("form.new") : t("form.edit", { name: draft.serverName })}
-			</div>
-			<div className={C.editorBody}>
-				<div className={C.field}>
-					<div className={C.label}>{t("form.serverName")}</div>
-					<input
-						className={C.input}
-						value={draft.serverName}
-						onChange={(event) => set({ serverName: event.target.value })}
-						placeholder="github"
-					/>
-					<span className={C.hint}>{t("form.serverNameHint")}</span>
-				</div>
-				<div className={C.field}>
-					<div className={C.label}>{t("form.transport")}</div>
-					<select
-						className={C.select}
-						value={draft.transport}
-						onChange={(event) => set({ transport: event.target.value as EditorDraft["transport"] })}
-					>
-						<option value="stdio">{t("form.transport.stdio")}</option>
-						<option value="streamable-http">{t("form.transport.http")}</option>
-					</select>
-				</div>
-				{draft.transport === "stdio" ? (
-					<>
-						<div className={C.field}>
-							<div className={C.label}>{t("form.command")}</div>
-							<input
-								className={C.input}
-								value={draft.command}
-								onChange={(event) => set({ command: event.target.value })}
-								placeholder="npx -y @modelcontextprotocol/server-github"
-							/>
-							<span className={C.hint}>{t("form.commandHint")}</span>
-						</div>
-						<div className={C.field}>
-							<div className={C.label}>{t("form.args")}</div>
-							<textarea
-								className={C.textarea}
-								value={draft.argsText}
-								onChange={(event) => set({ argsText: event.target.value })}
-							/>
-						</div>
-						<div className={C.field}>
-							<div className={C.label}>{t("form.cwd")}</div>
-							<input className={C.input} value={draft.cwd} onChange={(event) => set({ cwd: event.target.value })} />
-						</div>
-						<div className={C.field}>
-							<div className={C.label}>{t("form.env")}</div>
-							<textarea
-								className={C.textarea}
-								value={draft.envText}
-								onChange={(event) => set({ envText: event.target.value })}
-								placeholder="GITHUB_TOKEN=xxx"
-							/>
-						</div>
-					</>
-				) : (
-					<>
-						<div className={C.field}>
-							<div className={C.label}>{t("form.url")}</div>
-							<input
-								className={C.input}
-								value={draft.url}
-								onChange={(event) => set({ url: event.target.value })}
-								placeholder="http://localhost:3000/mcp"
-							/>
-						</div>
-						<div className={C.field}>
-							<div className={C.label}>{t("form.headers")}</div>
-							<textarea
-								className={C.textarea}
-								value={draft.headersText}
-								onChange={(event) => set({ headersText: event.target.value })}
-								placeholder="Authorization=Bearer xxx"
-							/>
-						</div>
-					</>
-				)}
-				<div className={C.field}>
-					<div className={C.label}>{t("form.timeout")}</div>
-					<input
-						className={C.input}
-						value={draft.timeoutText}
-						onChange={(event) => set({ timeoutText: event.target.value })}
-						placeholder="60000"
-					/>
-				</div>
-				<label className={C.checkbox}>
-					<input
-						type="checkbox"
-						checked={draft.failOnStartup}
-						onChange={(event) => set({ failOnStartup: event.target.checked })}
-					/>
-					{t("form.failOnStartup")}
-				</label>
-				{error !== undefined ? <div className={C.error}>{error}</div> : null}
-			</div>
-			<div className={C.editorFooter}>
-				<button type="button" className={C.btn} onClick={onCancel}>
-					{t("form.cancel")}
-				</button>
-				<button type="button" className={`${C.btn} ${C.btnPrimary}`} onClick={commit}>
-					{t("form.save")}
-				</button>
-			</div>
-		</div>
+		<Modal
+			open
+			onClose={onCancel}
+			title={draft.id === "" ? t("form.new") : t("form.edit", { name: draft.serverName })}
+			closeLabel={t("form.cancel")}
+			className={C.editorDialog}
+			contentClassName={C.editorDialogContent}
+			footer={
+				<>
+					<button type="button" className={C.btn} onClick={onCancel}>
+						{t("form.cancel")}
+					</button>
+					<button type="button" className={`${C.btn} ${C.btnPrimary}`} onClick={commit}>
+						{t("form.save")}
+					</button>
+				</>
+			}
+		>
+			<ServerEditorFields
+				draft={draft}
+				onDraft={(next) => {
+					setError(undefined);
+					onDraft(next);
+				}}
+				t={t}
+			/>
+			{error !== undefined ? <div className={C.error}>{error}</div> : null}
+		</Modal>
 	);
 }
 
@@ -513,7 +543,7 @@ export function McpPanel({ mcp, t }: McpPanelProps) {
 				</div>
 			)}
 			{editor !== null ? (
-				<ServerEditor
+				<ServerEditorDialog
 					draft={editor}
 					onDraft={setEditor}
 					onCancel={() => setEditor(null)}
