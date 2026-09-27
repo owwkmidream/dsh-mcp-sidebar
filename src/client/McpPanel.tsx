@@ -1,9 +1,9 @@
 /**
- * MCP settings page UI. Mounted into the `settings.section` slot; lists the
- * managed MCP servers with live status, stages edits locally (add / edit /
- * remove / enable-disable), and commits them through `remote.mcp.save` —
- * the host reconciles the loader tree and each change hot-reloads the affected
- * `dsh-mcp-client` entry.
+ * MCP manager panel. Mounted into the `main` keyed slot under {@link PANEL_ID}
+ * and selected from the sidebar; lists the managed MCP servers with live
+ * status, stages edits locally (add / edit / remove / enable-disable), and
+ * commits them through `remote.mcp.save` — the host reconciles the loader tree
+ * and each change hot-reloads the affected `dsh-mcp-client` entry.
  *
  * Styling uses the DSH design tokens (`--dsw-alias-*`); the stylesheet is
  * injected once by the client plugin body.
@@ -20,10 +20,8 @@ import { C } from "./styles.js";
 /** The translate seat of this plugin's `setting-mcp` locale namespace. */
 export type PanelTranslate = TranslateNS<"setting-mcp">;
 
-/** Owner + injected + framework standard props for the settings section entry. */
-export interface McpSettingsSectionProps {
-	/** Close the settings panel (shell-owned affordance). */
-	close: () => void;
+/** Injected face for the panel entry. */
+export interface McpPanelProps {
 	/** Injected `remote.mcp` handle. */
 	mcp: McpRemote;
 	/** Framework-injected translate seat (namespace `setting-mcp`). */
@@ -53,7 +51,7 @@ const layout = {
 } as const;
 
 /** Page intro line: the `desc` copy followed by a "contact the developer" link. */
-function SectionDesc({ t }: { t: PanelTranslate }) {
+function PanelDesc({ t }: { t: PanelTranslate }) {
 	return (
 		<p className={C.desc}>
 			{t("desc")}
@@ -359,9 +357,9 @@ function ServerEditor({ draft, onDraft, onCancel, onCommit, t }: EditorProps) {
 	);
 }
 
-// ── page ───────────────────────────────────────────────────────────────────
+// ── panel ──────────────────────────────────────────────────────────────────
 
-export function McpSettingsSection({ mcp, t }: McpSettingsSectionProps) {
+export function McpPanel({ mcp, t }: McpPanelProps) {
 	const [servers, setServers] = useState<McpServerView[]>([]);
 	const [drafts, setDrafts] = useState<McpServerInput[]>([]);
 	const [editor, setEditor] = useState<EditorDraft | null>(null);
@@ -441,7 +439,7 @@ export function McpSettingsSection({ mcp, t }: McpSettingsSectionProps) {
 	if (busy) {
 		return (
 			<div className={C.wrap}>
-				<SectionDesc t={t} />
+				<PanelDesc t={t} />
 				<div className={C.empty}>{t("status.loading")}</div>
 			</div>
 		);
@@ -449,7 +447,7 @@ export function McpSettingsSection({ mcp, t }: McpSettingsSectionProps) {
 
 	return (
 		<div className={C.wrap}>
-			<SectionDesc t={t} />
+			<PanelDesc t={t} />
 			{error !== "" ? <div className={C.error}>{error}</div> : null}
 			<div style={layout.row}>
 				<button
