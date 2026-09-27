@@ -4,7 +4,7 @@
  * host TYPERT face lives in `./typert` (auto-registered by `dsh-typert-loader`);
  * the browser half lives in `./client`.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type { Context } from "@deepseek-ai/cordis";

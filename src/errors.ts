@@ -3,7 +3,7 @@
  * typert gateway folds a thrown error carrying a `code` property into the
  * `{ ok: false, error: { code, message, details } }` result branch.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 /** Validation failure with a stable code, surfaced to the settings UI. */

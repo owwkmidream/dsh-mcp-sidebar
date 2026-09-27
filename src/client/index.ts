@@ -4,7 +4,7 @@
  * first-class sidebar panel beside **Plugins** (the `sidebar.panellist`
  * entry) opening its own `main` column panel.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type { Context as ClientContext } from "@deepseek-ai/cordis";

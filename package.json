@@ -1,16 +1,16 @@
 {
-  "name": "@opendsh/dsh-plugin-setting-mcp",
+  "name": "@owwkmidream/dsh-plugin-setting-mcp",
   "version": "0.1.2",
   "description": "DSH web plugin: manage MCP servers from a sidebar panel (view, edit, remove, enable/disable) with hot reload on save",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ceelog/dsh-plugins.git"
+    "url": "git+https://github.com/owwkmidream/dsh-mcp-sidebar.git"
   },
-  "homepage": "https://github.com/Ceelog/dsh-plugins#readme",
+  "homepage": "https://github.com/owwkmidream/dsh-mcp-sidebar#readme",
   "bugs": {
-    "url": "https://github.com/Ceelog/dsh-plugins/issues"
+    "url": "https://github.com/owwkmidream/dsh-mcp-sidebar/issues"
   },
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",

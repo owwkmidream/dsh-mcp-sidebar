@@ -8,7 +8,7 @@
  * Styling uses the DSH design tokens (`--dsw-alias-*`); the stylesheet is
  * injected once by the client plugin body.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import { Modal } from "@deepseek-ai/dsh-client-ui-primitives";
@@ -51,17 +51,12 @@ const layout = {
 	spacer: { flex: 1 },
 } as const;
 
-/** Panel head: the page title, the `desc` copy, and the "contact the developer" link. */
+/** Panel head: the page title and the `desc` copy. */
 function PanelHead({ t }: { t: PanelTranslate }) {
 	return (
 		<header className={C.head}>
 			<h1 className={C.title}>{t("title")}</h1>
-			<p className={C.desc}>
-				{t("desc")}
-				<a className={C.contact} href="https://paiban.md/qrcode.png" target="_blank" rel="noreferrer">
-					{t("contact")}
-				</a>
-			</p>
+			<p className={C.desc}>{t("desc")}</p>
 		</header>
 	);
 }

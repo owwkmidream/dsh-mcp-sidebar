@@ -3,7 +3,7 @@
  * `ctx.remote.$mount(TYPERT_REMOTE)`; every method returns the wire result
  * shape `{ ok: true, value } | { ok: false, error }`.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type { McpServerView, SaveInput } from "../schemas.js";

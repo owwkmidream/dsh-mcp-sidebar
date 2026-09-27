@@ -1,10 +1,10 @@
-# @opendsh/dsh-plugin-setting-mcp
+# @owwkmidream/dsh-plugin-setting-mcp
 
 [English](README.md) | 中文
 
-DSH Web 插件：**在设置面板中管理 MCP 服务**。可以查看、修改、移除、启用/停用 MCP
+DSH Web 插件：**在侧栏面板中管理 MCP 服务**。可以查看、修改、移除、启用/停用 MCP
 服务，点击 **保存** 后立即热更新生效（无需重启进程）——因为每个服务都是
-`@deepseek-ai/dsh-mcp-client` 的一个活跃 loader 条目。
+`@deepseek-ai/dsh-mcp-client` 的一个活跃 loader 条目。面板位于侧栏 **插件** 旁边。
 
 ## 功能
 
@@ -24,21 +24,32 @@ DSH Web 插件：**在设置面板中管理 MCP 服务**。可以查看、修改
 
 ## 架构
 
-一个安装到 `web` profile 的双端 npm 包：
+一个双端 npm 包：
 
 | 端     | 入口             | 职责                                                                                                       |
 | ------ | ---------------- | ---------------------------------------------------------------------------------------------------------- |
 | 服务端 | `lib/index.js`   | Cordis 插件（`inject: ["loader"]`）：挂载 `ctx.mcp` typert 服务，投影并 reconcile loader 中的 MCP 条目。   |
 | 协议   | `lib/typert.js`  | 服务端 TYPERT 接口（`mcp/list`、`mcp/save`），由 `dsh-typert-loader` 自动注册。                            |
-| 浏览器 | `lib/client.js`  | 挂载到 `settings.section` 插槽的 React 页面，通过 `remote.mcp` 命名空间调用服务端。                        |
+| 浏览器 | `lib/client.js`  | 注册到 `main` keyed 插槽与 `sidebar.panellist` 列表的 React 面板，通过 `remote.mcp` 命名空间调用服务端。   |
 
 客户端与服务端之间走 DSH typert 协议：严格 zod 编解码在两侧校验所有参数与结果。
 
 ## 安装
 
+从本地目录安装（路径必须是绝对路径）：
+
 ```sh
-dsh plugin --profile web add @opendsh/dsh-plugin-setting-mcp
+dsh plugin --profile desktop add D:\path\to\dsh-plugin-setting-mcp
 ```
+
+或直接从 git 安装：
+
+```sh
+dsh plugin --profile desktop add github:owwkmidream/dsh-mcp-sidebar
+```
+
+两种方式都会校验包声明了 `dsh.bundle`、用 pnpm 安装、并把该 bundle 选入 profile 的
+`dsh.profile.bundles`，无需手工改依赖。
 
 ## 与 `cordis.patch.yml` 的对应关系
 

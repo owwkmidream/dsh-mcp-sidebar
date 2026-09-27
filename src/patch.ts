@@ -7,7 +7,7 @@
  * touching any other patch entries (bundle inserts, hand-written overrides,
  * `!!js` expressions). It is pure and dependency-free so it is unit-testable.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type { EntryOptions } from "@deepseek-ai/cordis-plugin-loader";

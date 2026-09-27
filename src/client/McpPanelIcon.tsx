@@ -3,7 +3,7 @@
  * selected state around it. Mirrors the Plugins entry's icon shape so the two
  * panel entries sit in the same sidebar row.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type {} from "@deepseek-ai/dsh-client-ui-sidebar/client";

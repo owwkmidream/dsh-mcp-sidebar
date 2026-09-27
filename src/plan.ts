@@ -4,7 +4,7 @@
  * bring the loader tree in line. Pure and dependency-free so it is trivially
  * unit-testable; the runtime applies the plan through `ctx.loader`.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import { McpInputError } from "./errors.js";

@@ -9,7 +9,7 @@
  * (stable loader-entry key) and `enabled` (the loader entry's effective
  * enablement).
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import { z } from "zod";

@@ -1,11 +1,11 @@
-# @opendsh/dsh-plugin-setting-mcp
+# @owwkmidream/dsh-plugin-setting-mcp
 
 English | [中文](README.zh.md)
 
-DSH web plugin: **manage MCP servers from the settings panel**. View, edit, remove,
+DSH web plugin: **manage MCP servers from a sidebar panel**. View, edit, remove,
 enable, and disable MCP servers, then **Save** — the change hot-reloads immediately
 (no process restart), because each server is a live `@deepseek-ai/dsh-mcp-client`
-loader entry.
+loader entry. The panel sits beside **Plugins** in the sidebar.
 
 ![](./docs/demo.png)
 
@@ -34,16 +34,28 @@ A dual-face npm package installed into the `web` profile:
 | -------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Server   | `lib/index.js`  | Cordis plugin (`inject: ["loader"]`): mounts the `ctx.mcp` typert service that projects and reconciles the loader's `@deepseek-ai/dsh-mcp-client` entries. |
 | Protocol | `lib/typert.js` | Host TYPERT face (`mcp/list`, `mcp/save`), auto-registered by `dsh-typert-loader`.                                                                         |
-| Browser  | `lib/client.js` | React page mounted into the `settings.section` slot; calls the host through the installed `remote.mcp` namespace.                                          |
+| Browser  | `lib/client.js` | React panel registered into the `main` keyed slot and the `sidebar.panellist` list; calls the host through the installed `remote.mcp` namespace.           |
 
 The client↔server channel is the DSH typert protocol: strict zod codecs validate
 every argument and result on both sides.
 
 ## Install
 
+From a local checkout (the path must be absolute):
+
 ```sh
-dsh plugin --profile web add @opendsh/dsh-plugin-setting-mcp
+dsh plugin --profile desktop add D:\path\to\dsh-plugin-setting-mcp
 ```
+
+Or straight from git:
+
+```sh
+dsh plugin --profile desktop add github:owwkmidream/dsh-mcp-sidebar
+```
+
+Both forms validate that the package declares `dsh.bundle`, install it with pnpm,
+and select the bundle in the profile's `dsh.profile.bundles`, so no manual
+dependency editing is needed.
 
 ## How it maps to `cordis.patch.yml`
 

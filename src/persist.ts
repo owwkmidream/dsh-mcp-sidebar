@@ -13,7 +13,7 @@
  * harness's own include uses, so any non-MCP patch entries are preserved
  * bit-for-bit in value (their leading comment header is kept too).
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import { readFile, rename, writeFile } from "node:fs/promises";

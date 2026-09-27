@@ -10,7 +10,7 @@
  * The CSS is injected once by the client plugin body (`injectStyles`) using the
  * same `data-plugin-css` mechanism the official client bundles use.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 /** Scoped class names referenced by the page components. */
@@ -19,7 +19,6 @@ export const C = {
 	head: "dshmcp-head",
 	title: "dshmcp-title",
 	desc: "dshmcp-desc",
-	contact: "dshmcp-contact",
 	toolbar: "dshmcp-toolbar",
 	list: "dshmcp-list",
 	row: "dshmcp-row",
@@ -58,8 +57,6 @@ const css = `
 .dshmcp-head{display:flex;flex-direction:column;gap:4px;box-sizing:border-box;padding-top:28px}
 .dshmcp-title{margin:0;font-size:20px;font-weight:500;line-height:28px}
 .dshmcp-desc{margin:0;font-size:13px;line-height:20px;color:var(--dsw-alias-label-secondary)}
-.dshmcp-contact{color:var(--dsw-alias-label-tertiary);text-decoration:underline;cursor:pointer;white-space:nowrap;margin-left:6px}
-.dshmcp-contact:hover{color:var(--dsw-alias-label-secondary)}
 
 .dshmcp-toolbar{display:flex;align-items:center;gap:12px}
 .dshmcp-list{display:flex;flex-direction:column;gap:8px}
@@ -110,10 +107,10 @@ const css = `
 /** Inject the stylesheet once (idempotent), mirroring the official CSS-module mechanism. */
 export function injectStyles(): void {
 	if (typeof document === "undefined") return;
-	const tagId = "@opendsh/dsh-plugin-setting-mcp/panel.css";
+	const tagId = "@owwkmidream/dsh-plugin-setting-mcp/panel.css";
 	if (document.querySelector(`style[data-plugin-css=${JSON.stringify(tagId)}]`) !== null) return;
 	const tag = document.createElement("style");
-	tag.dataset.plugin = "@opendsh/dsh-plugin-setting-mcp";
+	tag.dataset.plugin = "@owwkmidream/dsh-plugin-setting-mcp";
 	tag.dataset.pluginCss = tagId;
 	tag.textContent = css;
 	document.head.appendChild(tag);

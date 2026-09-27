@@ -9,7 +9,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 
-const PKG = "@opendsh/dsh-plugin-setting-mcp";
+const PKG = "@owwkmidream/dsh-plugin-setting-mcp";
 const TARGET = new URL("../lib/client.js", import.meta.url);
 
 const code = readFileSync(TARGET, "utf8");

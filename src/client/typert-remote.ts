@@ -3,14 +3,14 @@
  * through `ctx.remote.$mount(...)`, mirroring the host TYPERT manifest
  * one-to-one so both directions validate with the same strict codecs.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type { TypertRemoteContribution } from "@deepseek-ai/dsh-typert-protocol";
 import { z } from "zod";
 import { mcpServerViewSchema, saveInputSchema } from "../schemas.js";
 
-const PKG = "@opendsh/dsh-plugin-setting-mcp";
+const PKG = "@owwkmidream/dsh-plugin-setting-mcp";
 
 const direct: { kind: "direct" } = { kind: "direct" };
 

@@ -6,7 +6,7 @@
  * reconciled set is persisted to the profile's `cordis.patch.yml`, the durable
  * patch layer that survives restart.
  *
- * @module @opendsh/dsh-plugin-setting-mcp
+ * @module @owwkmidream/dsh-plugin-setting-mcp
  */
 
 import type { Context } from "@deepseek-ai/cordis";
