@@ -1,10 +1,14 @@
 /**
- * Theme-aware stylesheet for the MCP settings page.
+ * Theme-aware stylesheet for the MCP manager panel.
  *
- * Uses the same `--dsw-alias-*` design tokens as the shipped settings panels
- * so the page follows the active light/dark theme. The CSS is injected once by
- * the client plugin body (`injectStyles`) using the same `data-plugin-css`
- * mechanism the official client bundles use.
+ * Mirrors the shipped Plugins page (`ui-plugin-manager`) so the panel reads as
+ * part of DSH rather than a bolt-on: a centred column capped at 960px, the same
+ * 28px head inset, 13px body type, 32px buttons on `--dsw-radius-md`, and flat
+ * bordered rows instead of boxed cards. All colors come from the `--dsw-alias-*`
+ * design tokens, so the page follows the active light/dark theme.
+ *
+ * The CSS is injected once by the client plugin body (`injectStyles`) using the
+ * same `data-plugin-css` mechanism the official client bundles use.
  *
  * @module @opendsh/dsh-plugin-setting-mcp
  */
@@ -12,8 +16,12 @@
 /** Scoped class names referenced by the page components. */
 export const C = {
 	wrap: "dshmcp-wrap",
+	head: "dshmcp-head",
+	title: "dshmcp-title",
 	desc: "dshmcp-desc",
 	contact: "dshmcp-contact",
+	toolbar: "dshmcp-toolbar",
+	list: "dshmcp-list",
 	row: "dshmcp-row",
 	rowMain: "dshmcp-row-main",
 	name: "dshmcp-name",
@@ -45,41 +53,56 @@ export const C = {
 } as const;
 
 const css = `
-.dshmcp-wrap{display:flex;flex-direction:column;gap:10px;padding:4px 0}
-.dshmcp-desc{color:var(--dsw-alias-label-tertiary);font-size:11px;line-height:16px;margin:0}
-.dshmcp-contact{color:var(--dsw-alias-state-info-primary,var(--dsw-alias-label-secondary));font-size:11px;line-height:16px;text-decoration:underline;margin-left:8px;cursor:pointer;white-space:nowrap}
-.dshmcp-contact:hover{text-decoration:underline;opacity:.8}
-.dshmcp-row{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px}
-.dshmcp-row-main{min-width:0;display:flex;flex-direction:column;gap:2px;flex:1}
-.dshmcp-name{color:var(--dsw-alias-label-primary);font-size:13px;font-weight:500;line-height:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dshmcp-meta{color:var(--dsw-alias-label-tertiary);font-size:11px;line-height:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dshmcp-badge{background:var(--dsw-alias-button-ghost-active-fill);color:var(--dsw-alias-label-caption);height:20px;border-radius:10px;flex:none;align-items:center;padding:0 6px;font-size:11px;line-height:20px;display:inline-flex}
+.dshmcp-wrap{display:flex;flex-direction:column;align-items:center;gap:24px;box-sizing:border-box;height:100%;overflow:auto;padding:0 clamp(24px,4vw,48px) 48px;color:var(--dsw-alias-label-primary)}
+.dshmcp-wrap>*{width:100%;max-width:960px}
+
+.dshmcp-head{display:flex;flex-direction:column;gap:4px;box-sizing:border-box;padding-top:28px}
+.dshmcp-title{margin:0;font-size:20px;font-weight:500;line-height:28px}
+.dshmcp-desc{margin:0;font-size:13px;line-height:20px;color:var(--dsw-alias-label-secondary)}
+.dshmcp-contact{color:var(--dsw-alias-label-tertiary);text-decoration:underline;cursor:pointer;white-space:nowrap;margin-left:6px}
+.dshmcp-contact:hover{color:var(--dsw-alias-label-secondary)}
+
+.dshmcp-toolbar{display:flex;align-items:center;gap:12px}
+.dshmcp-list{display:flex;flex-direction:column;gap:8px}
+
+.dshmcp-row{display:flex;align-items:center;gap:12px;box-sizing:border-box;padding:12px 16px;border-radius:var(--dsw-radius-xl);border:1px solid var(--dsw-alias-border-l3);background:var(--dsw-alias-bg-base)}
+.dshmcp-row-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.dshmcp-name{font-size:14px;font-weight:400;line-height:20px;color:var(--dsw-alias-label-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dshmcp-meta{font-size:12px;line-height:18px;color:var(--dsw-alias-label-tertiary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.dshmcp-badge{display:inline-flex;flex:none;align-items:center;height:20px;padding:0 6px;border-radius:var(--dsw-radius-sm);background:var(--dsw-alias-button-ghost-active-fill);color:var(--dsw-alias-label-caption);font-size:11px;line-height:20px}
 .dshmcp-badge-ok{background:var(--dsw-alias-state-success-tertiary);color:var(--dsw-alias-state-success-primary)}
 .dshmcp-badge-off{background:var(--dsw-alias-button-ghost-active-fill);color:var(--dsw-alias-label-caption)}
 .dshmcp-badge-error{background:var(--dsw-alias-interactive-bg-hover-danger);color:var(--dsw-alias-state-error-primary)}
-.dshmcp-badge-info{background:var(--dsw-alias-state-info-tertiary,var(--dsw-alias-button-ghost-active-fill));color:var(--dsw-alias-state-info-primary,var(--dsw-alias-label-caption))}
-.dshmcp-btn{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);font-family:inherit;font-size:11px;line-height:22px;cursor:pointer;background:0 0;border-radius:999px;flex:none;padding:0 10px}
+.dshmcp-badge-info{background:var(--dsw-alias-button-ghost-active-fill);color:var(--dsw-alias-label-secondary)}
+
+.dshmcp-btn{display:inline-flex;flex:none;align-items:center;height:32px;padding:0 12px;border:1px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-md);background:transparent;color:var(--dsw-alias-label-secondary);font-family:inherit;font-size:13px;line-height:20px;cursor:pointer;transition:background .12s ease}
 .dshmcp-btn:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}
 .dshmcp-btn:disabled{opacity:.4;cursor:default}
 .dshmcp-btn-primary{border-color:transparent;background:var(--dsw-alias-button-primary-fill);color:var(--dsw-alias-button-primary-dimmed)}
 .dshmcp-btn-primary:hover:not(:disabled){background:var(--dsw-alias-button-primary-hover)}
-.dshmcp-btn-danger{color:var(--dsw-alias-state-error-primary)}
-.dshmcp-row-actions{display:flex;align-items:center;gap:6px;flex:none}
-.dshmcp-field{display:flex;flex-direction:column;gap:4px}
-.dshmcp-label{color:var(--dsw-alias-label-caption);font-size:11px;line-height:16px}
-.dshmcp-hint{color:var(--dsw-alias-label-tertiary);font-size:11px;line-height:16px}
-.dshmcp-input,.dshmcp-select,.dshmcp-textarea{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);color:var(--dsw-alias-label-secondary);font:inherit;border-radius:7px;padding:5px 8px;width:100%;font-size:12px;line-height:18px}
-.dshmcp-textarea{min-height:64px;resize:vertical;font-family:var(--dsh-font-mono,monospace)}
-.dshmcp-checkbox{display:flex;align-items:center;gap:6px;color:var(--dsw-alias-label-secondary);font-size:12px;line-height:18px}
+.dshmcp-btn-danger{color:var(--dsw-alias-state-error-primary);border-color:color-mix(in srgb,var(--dsw-alias-state-error-primary) 30%,transparent);--dsw-alias-interactive-bg-hover:color-mix(in srgb,var(--dsw-alias-state-error-primary) 8%,transparent)}
+.dshmcp-row-actions{display:flex;flex:none;align-items:center;gap:8px}
+
+.dshmcp-field{display:flex;flex-direction:column;gap:6px}
+.dshmcp-label{font-size:13px;line-height:20px;color:var(--dsw-alias-label-secondary)}
+.dshmcp-hint{font-size:12px;line-height:18px;color:var(--dsw-alias-label-tertiary)}
+.dshmcp-input,.dshmcp-select,.dshmcp-textarea{box-sizing:border-box;width:100%;padding:0 10px;border:1px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-base);color:var(--dsw-alias-label-primary);font:inherit;font-size:13px;line-height:20px}
+.dshmcp-input,.dshmcp-select{height:32px}
+.dshmcp-textarea{min-height:72px;padding:6px 10px;resize:vertical;font-family:var(--dsh-font-mono,monospace);font-size:12px;line-height:18px}
+.dshmcp-checkbox{display:flex;align-items:center;gap:8px;font-size:13px;line-height:20px;color:var(--dsw-alias-label-secondary)}
 .dshmcp-checkbox input{accent-color:var(--dsw-alias-button-primary-fill)}
-.dshmcp-error{color:var(--dsw-alias-state-error-primary);background:var(--dsw-alias-interactive-bg-hover-danger);border-radius:8px;padding:6px 10px;font-size:11px;line-height:16px}
-.dshmcp-empty{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px;text-align:center;padding:28px 12px;display:flex;flex-direction:column;gap:4px;align-items:center}
-.dshmcp-editor{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);border-radius:12px;overflow:hidden}
-.dshmcp-editor-header{border-bottom:1px solid var(--dsw-alias-border-l2);padding:10px 12px;color:var(--dsw-alias-label-primary);font-size:13px;font-weight:500;line-height:20px}
-.dshmcp-editor-body{display:flex;flex-direction:column;gap:10px;padding:12px}
-.dshmcp-editor-footer{border-top:1px solid var(--dsw-alias-border-l1);padding:8px 12px;display:flex;justify-content:flex-end;gap:8px}
-.dshmcp-footer{display:flex;align-items:center;gap:8px;padding-top:4px}
-.dshmcp-notice{color:var(--dsw-alias-state-success-primary);font-size:11px;line-height:16px;flex:1}
+
+.dshmcp-error{box-sizing:border-box;padding:8px 12px;border-radius:var(--dsw-radius-md);background:var(--dsw-alias-interactive-bg-hover-danger);color:var(--dsw-alias-state-error-primary);font-size:13px;line-height:20px}
+.dshmcp-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 16px;color:var(--dsw-alias-label-tertiary);font-size:13px;line-height:20px;text-align:center}
+
+.dshmcp-editor{display:flex;flex-direction:column;box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-bg-base);overflow:hidden}
+.dshmcp-editor-header{padding:12px 16px;border-bottom:1px solid var(--dsw-alias-border-l2);font-size:14px;font-weight:500;line-height:20px;color:var(--dsw-alias-label-primary)}
+.dshmcp-editor-body{display:flex;flex-direction:column;gap:14px;padding:16px}
+.dshmcp-editor-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid var(--dsw-alias-border-l1)}
+
+.dshmcp-footer{display:flex;align-items:center;gap:12px}
+.dshmcp-notice{flex:1;font-size:13px;line-height:20px;color:var(--dsw-alias-state-success-primary)}
 `;
 
 /** Inject the stylesheet once (idempotent), mirroring the official CSS-module mechanism. */

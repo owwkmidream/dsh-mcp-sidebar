@@ -50,15 +50,18 @@ const layout = {
 	spacer: { flex: 1 },
 } as const;
 
-/** Page intro line: the `desc` copy followed by a "contact the developer" link. */
-function PanelDesc({ t }: { t: PanelTranslate }) {
+/** Panel head: the page title, the `desc` copy, and the "contact the developer" link. */
+function PanelHead({ t }: { t: PanelTranslate }) {
 	return (
-		<p className={C.desc}>
-			{t("desc")}
-			<a className={C.contact} href="https://paiban.md/qrcode.png" target="_blank" rel="noreferrer">
-				{t("contact")}
-			</a>
-		</p>
+		<header className={C.head}>
+			<h1 className={C.title}>{t("title")}</h1>
+			<p className={C.desc}>
+				{t("desc")}
+				<a className={C.contact} href="https://paiban.md/qrcode.png" target="_blank" rel="noreferrer">
+					{t("contact")}
+				</a>
+			</p>
+		</header>
 	);
 }
 
@@ -439,7 +442,7 @@ export function McpPanel({ mcp, t }: McpPanelProps) {
 	if (busy) {
 		return (
 			<div className={C.wrap}>
-				<PanelDesc t={t} />
+				<PanelHead t={t} />
 				<div className={C.empty}>{t("status.loading")}</div>
 			</div>
 		);
@@ -447,9 +450,9 @@ export function McpPanel({ mcp, t }: McpPanelProps) {
 
 	return (
 		<div className={C.wrap}>
-			<PanelDesc t={t} />
+			<PanelHead t={t} />
 			{error !== "" ? <div className={C.error}>{error}</div> : null}
-			<div style={layout.row}>
+			<div className={C.toolbar}>
 				<button
 					type="button"
 					className={`${C.btn} ${C.btnPrimary}`}
@@ -467,45 +470,47 @@ export function McpPanel({ mcp, t }: McpPanelProps) {
 					<span>{t("list.emptyHint")}</span>
 				</div>
 			) : (
-				drafts.map((server) => {
-					const view = servers.find((entry) => entry.id === server.id);
-					const badge = view === undefined ? { cls: C.badgeOff, text: "" } : phaseBadge(t, view);
-					const target = server.transport === "stdio" ? server.command : server.url;
-					return (
-						<div className={C.row} key={server.id}>
-							<div className={C.rowMain}>
-								<div className={C.name}>{server.serverName}</div>
-								<div className={C.meta}>
-									{transportLabel(t, server.transport)} · {target ?? ""}
+				<div className={C.list}>
+					{drafts.map((server) => {
+						const view = servers.find((entry) => entry.id === server.id);
+						const badge = view === undefined ? { cls: C.badgeOff, text: "" } : phaseBadge(t, view);
+						const target = server.transport === "stdio" ? server.command : server.url;
+						return (
+							<div className={C.row} key={server.id}>
+								<div className={C.rowMain}>
+									<div className={C.name}>{server.serverName}</div>
+									<div className={C.meta}>
+										{transportLabel(t, server.transport)} · {target ?? ""}
+									</div>
+								</div>
+								<span className={`${C.badge} ${badge.cls}`}>{badge.text}</span>
+								<div className={C.rowActions}>
+									<button type="button" className={C.btn} onClick={() => toggleServer(server.id)} disabled={saving}>
+										{server.enabled ? t("action.disable") : t("action.enable")}
+									</button>
+									<button
+										type="button"
+										className={C.btn}
+										onClick={() => setEditor(toEditorDraft(view))}
+										disabled={saving}
+									>
+										{t("action.edit")}
+									</button>
+									<button
+										type="button"
+										className={`${C.btn} ${C.btnDanger}`}
+										onClick={() => {
+											if (window.confirm(t("confirm.remove", { name: server.serverName }))) removeServer(server.id);
+										}}
+										disabled={saving}
+									>
+										{t("action.remove")}
+									</button>
 								</div>
 							</div>
-							<span className={`${C.badge} ${badge.cls}`}>{badge.text}</span>
-							<div className={C.rowActions}>
-								<button type="button" className={C.btn} onClick={() => toggleServer(server.id)} disabled={saving}>
-									{server.enabled ? t("action.disable") : t("action.enable")}
-								</button>
-								<button
-									type="button"
-									className={C.btn}
-									onClick={() => setEditor(toEditorDraft(view))}
-									disabled={saving}
-								>
-									{t("action.edit")}
-								</button>
-								<button
-									type="button"
-									className={`${C.btn} ${C.btnDanger}`}
-									onClick={() => {
-										if (window.confirm(t("confirm.remove", { name: server.serverName }))) removeServer(server.id);
-									}}
-									disabled={saving}
-								>
-									{t("action.remove")}
-								</button>
-							</div>
-						</div>
-					);
-				})
+						);
+					})}
+				</div>
 			)}
 			{editor !== null ? (
 				<ServerEditor
